@@ -5,33 +5,38 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-int **get_input() {
+#define N 9
+
+void get_input(int nums[N][N]) {
+	// Open the file.
 	FILE *f = fopen("input.txt", "r");
 	if (f==NULL) 
 		printf("Error Opening input.txt\n");
-	
-	int nums[9][9];
-	int d; 
-	fscanf(f, "%d", d);
-	print("%d", d);
-	/*
-	for (int i=0; i<9; i++) {
-		for (int j=0; j<9; j++) {
-			fscanf(f, "%d", &nums[i][j]);
+	// Read file and fill nums.
+	for (int j=0; j<N; j++) {
+		for (int i=0; i<N; i++) {
+			fscanf(f, "%1d", &nums[i][j]);
 		}
 	}
-	*/
+	// Close the file.
 	fclose(f);
-	return nums;
-}
-
-int main (int argc, char** argv) {
-	
 }
 
 void luke() {
-	int n = get_input();
+	int nums[N][N];
+	get_input(nums);
+	for (int j=0; j<N; j++) {
+		for (int i=0; i<N; i++) {
+			printf("%d", nums[i][j]);
+		}
+		printf("\n");
+	}	
 }
+
+int main (int argc, char** argv) {
+	luke();	
+}
+
 
 int method() {
 
