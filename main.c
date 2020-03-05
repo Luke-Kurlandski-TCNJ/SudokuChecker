@@ -37,12 +37,12 @@ void luke() {
 	get_input(nums);
 }
 
-int main (int argc, char** argv) {
-	//initialize 9x9 array of integers
-	Nnt nums [9][N];
-	//initialize array using getInput method
-	getInput(nums);
+void one_thread (int nums [N][N]) {
+	
+	
+}
 
+void multi_thread (int nums [N][N]) {	
 	//declare N threads
 	pthread_t tid[11];
 
@@ -65,11 +65,25 @@ int main (int argc, char** argv) {
 		//join all 11 threads
 		pthread_join(tid[i], NULL);
 	}
-
-	return 0;
 }
 
+int main (int argc, char** argv) {
+	//initialize 9x9 array of integers
+	int nums [N][N];
+	//initialize array using getInput method
+	getInput(nums);
 
-int method() {
+	//print out the sudoku board from the array
+	print_board(nums);
 
+	// if user enters 1, single-thread it
+	if (atoi(argv[1]) == 1) {
+		one_thread(int nums [N][N]);
+	}
+	// if user enters 2, multi-thread it
+	else if (atoi(argv[1]) == 2) {
+		multi_thread(int nums [N][N]);
+	}
+
+	return 0;
 }
