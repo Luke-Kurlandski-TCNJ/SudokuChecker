@@ -32,6 +32,42 @@ void print_board(int nums[N][N]) {
 	}		
 }
 
+int check_row(int nums[N][N], int row) {
+	// Determine which requirments (1-9) are present.
+	int reqs[N];
+	int num;
+	for (int i=0; i<N; i++) {
+		reqs[i] = 0;
+		num = nums[row][i];
+		reqs[num-1] = 1;
+	}
+	// Return 0 if a requirment is not present in row.
+	for (int i=0; i<N; i++) {
+		if (reqs[i] == 0)
+			return 0;
+	}
+	// Return 1 if digits 1-9 are present in row.
+	return 1;
+}
+
+int check_col(int nums[N][N], int col) {	
+	// Determine which requirments (1-9) are present.
+	int reqs[N];
+	int num;
+	for (int i=0; i<N; i++) {
+		reqs[i] = 0;
+		num = nums[i][col];
+		reqs[num-1] = 1;
+	}
+	// Return 0 if a requirment is not present in col.
+	for (int i=0; i<N; i++) {
+		if (reqs[i] == 0)
+			return 0;
+	}
+	// Return 1 if digits 1-9 are present in col.
+	return 1;
+}
+
 void luke() {
 	int nums[N][N];
 	get_input(nums);
