@@ -34,7 +34,7 @@ void print_board() {
 	}		
 }
 
-int check_rows() {
+void* check_rows(void* param) {
 	int reqs[N];
 	int n;
 	// Loop through every row.
@@ -48,14 +48,14 @@ int check_rows() {
 		// Return 0 if a requirment is not present in row.
 		for (int i=0; i<N; i++) {
 			if (reqs[i] == 0)
-				return 0;
+				return (void*) 0;
 		}
 	}
 	// Return 1 if digits 1-9 are present in row.
-	return 1;
+	return (void*) 1;
 }
 
-void *check_cols(int col) {	
+void* check_cols(void* param) {	
 	int reqs[N];
 	int n;
 	// Loop through every row.
@@ -69,14 +69,14 @@ void *check_cols(int col) {
 		// Return 0 if a requirment is not present in row.
 		for (int i=0; i<N; i++) {
 			if (reqs[i] == 0)
-				return 0;
+				return (void*) 0;
 		}
 	}
 	// Return 1 if digits 1-9 are present in row.
-	return 1;
+	return (void*) 1;
 }
 
-int check_box() {
+void* check_box(void* param) {
 
 }
 
@@ -105,7 +105,7 @@ void multi_thread () {
 
 int main (int argc, char** argv) {
 	//initialize array using getInput method
-	getInput(nums);
+	get_input(nums);
 
 	//print out the sudoku board from the array
 	print_board(nums);
