@@ -32,11 +32,6 @@ void print_board(int nums[N][N]) {
 	}		
 }
 
-void luke() {
-	int nums[N][N];
-	get_input(nums);
-}
-
 void one_thread (int nums [N][N]) {
 	
 	
@@ -49,15 +44,15 @@ void multi_thread (int nums [N][N]) {
 	for (int i = 0; i < 11; i++) {
 		if (i == 0) {
 			//create thread for checking column
-			pthread_create(&tid[i], 0, getCol, NULL);
+			pthread_create(&tid[i], 0, checkCol, NULL);
 		}
 		else if (i == 1) {
 			//create thread for checking rows
-			pthread_create(&tid[i], 0, getRow, NULL);
+			pthread_create(&tid[i], 0, checkRow, NULL);
 		}
 		else {
 			//create threads for checking boxes
-			pthread_create(&tid[i], 0, getBox, NULL);
+			pthread_create(&tid[i], 0, checkBox, NULL);
 		}
 	}
 
