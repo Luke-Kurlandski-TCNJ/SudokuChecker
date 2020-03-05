@@ -5,32 +5,66 @@
 #include <sys/types.h>
 #include <unistd.h>
 
+#define N 9
 
+void get_input(int nums[N][N]) {
+	// Open the file.
+	FILE *f = fopen("input.txt", "r");
+	if (f==NULL) 
+		printf("Error Opening input.txt\n");
+	// Read file and fill nums.
+	for (int j=0; j<N; j++) {
+		for (int i=0; i<N; i++) {
+			fscanf(f, "%1d", &nums[i][j]);
+		}
+	}
+	// Close the file.
+	fclose(f);
+}
+
+void luke() {
+	int nums[N][N];
+	get_input(nums);
+	for (int j=0; j<N; j++) {
+		for (int i=0; i<N; i++) {
+			printf("%d", nums[i][j]);
+		}
+		printf("\n");
+	}	
+}
 
 int main (int argc, char** argv) {
-	int nums [9][9]; //create array of integers
-	getInput(nums); //initialize array using getInput method
+	//initialize 9x9 array of integers
+	Nnt nums [9][N];
+	//initialize array using getInput method
+	getInput(nums);
 
-	pthread_t tid[11]; //declare N threads
+	//declare N threads
+	pthread_t tid[11];
 
 	for (int i = 0; i < 11; i++) {
 		if (i == 0) {
-			pthread_create(&tid[i], 0, getCol, NULL); //create threads for checking columns
+			//create thread for checking column
+			pthread_create(&tid[i], 0, getCol, NULL);
 		}
 		else if (i == 1) {
-			pthread_create(&tid[i], 0, getRow, NULL); //create thread for checking rows
+			//create thread for checking rows
+			pthread_create(&tid[i], 0, getRow, NULL);
 		}
 		else {
-			pthread_create(&tid[i], 0, getBox, NULL); //create threads for checking boxes
+			//create threads for checking boxes
+			pthread_create(&tid[i], 0, getBox, NULL);
 		}
 	}
 
 	for (int i = 0; i < 11; i++) {
-		pthread_join(tid[i], NULL); //join all 11 threads
+		//join all 11 threads
+		pthread_join(tid[i], NULL);
 	}
 
 	return 0;
 }
+
 
 int method() {
 
