@@ -68,32 +68,26 @@ int check_col(int nums[N][N], int col) {
 	return 1;
 }
 
-void luke() {
-	int nums[N][N];
-	get_input(nums);
+void one_thread (int nums [N][N]) {
+		
 }
 
-int main (int argc, char** argv) {
-	//initialize 9x9 array of integers
-	Nnt nums [9][N];
-	//initialize array using getInput method
-	getInput(nums);
-
+void multi_thread (int nums [N][N]) {	
 	//declare N threads
 	pthread_t tid[11];
 
 	for (int i = 0; i < 11; i++) {
 		if (i == 0) {
 			//create thread for checking column
-			pthread_create(&tid[i], 0, getCol, NULL);
+			pthread_create(&tid[i], 0, checkCol, NULL);
 		}
 		else if (i == 1) {
 			//create thread for checking rows
-			pthread_create(&tid[i], 0, getRow, NULL);
+			pthread_create(&tid[i], 0, checkRow, NULL);
 		}
 		else {
 			//create threads for checking boxes
-			pthread_create(&tid[i], 0, getBox, NULL);
+			pthread_create(&tid[i], 0, checkBox, NULL);
 		}
 	}
 
@@ -101,11 +95,25 @@ int main (int argc, char** argv) {
 		//join all 11 threads
 		pthread_join(tid[i], NULL);
 	}
-
-	return 0;
 }
 
+int main (int argc, char** argv) {
+	//initialize 9x9 array of integers
+	int nums [N][N];
+	//initialize array using getInput method
+	getInput(nums);
 
-int method() {
+	//print out the sudoku board from the array
+	print_board(nums);
 
+	// if user enters 1, single-thread it
+	if (atoi(argv[1]) == 1) {
+		one_thread(int nums [N][N]);
+	}
+	// if user enters 2, multi-thread it
+	else if (atoi(argv[1]) == 2) {
+		multi_thread(int nums [N][N]);
+	}
+
+	return 0;
 }
