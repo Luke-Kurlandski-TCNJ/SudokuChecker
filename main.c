@@ -7,7 +7,9 @@
 
 #define N 9
 
-void get_input(int nums[N][N]) {
+int nums[N][N];
+
+void get_input() {
 	// Open the file.
 	FILE *f = fopen("input.txt", "r");
 	if (f==NULL) 
@@ -22,7 +24,7 @@ void get_input(int nums[N][N]) {
 	fclose(f);
 }
 
-void print_board(int nums[N][N]) {
+void print_board() {
 	printf("Input Board:\n");
 	for (int j=0; j<N; j++) {
 		for (int i=0; i<N; i++) {
@@ -32,63 +34,67 @@ void print_board(int nums[N][N]) {
 	}		
 }
 
-int check_row(int nums[N][N], int row) {
-	// Determine which requirments (1-9) are present.
+int check_rows() {
 	int reqs[N];
-	int num;
-	for (int i=0; i<N; i++) {
-		reqs[i] = 0;
-		num = nums[row][i];
-		reqs[num-1] = 1;
-	}
-	// Return 0 if a requirment is not present in row.
-	for (int i=0; i<N; i++) {
-		if (reqs[i] == 0)
-			return 0;
+	int n;
+	// Loop through every row.
+	for (int row=0; row<N; row++) {
+	// Determine which requirments (1-9) are present.
+		for (int col=0; col<N; col++) {
+			reqs[col] = 0;
+			n = nums[row][col];
+			reqs[n-1] = 1;
+		}
+		// Return 0 if a requirment is not present in row.
+		for (int i=0; i<N; i++) {
+			if (reqs[i] == 0)
+				return 0;
+		}
 	}
 	// Return 1 if digits 1-9 are present in row.
 	return 1;
 }
 
-int check_col(int nums[N][N], int col) {	
-	// Determine which requirments (1-9) are present.
+void *check_cols(int col) {	
 	int reqs[N];
-	int num;
-	for (int i=0; i<N; i++) {
-		reqs[i] = 0;
-		num = nums[i][col];
-		reqs[num-1] = 1;
+	int n;
+	// Loop through every row.
+	for (int col=0; col<N; col++) {
+	// Determine which requirments (1-9) are present.
+		for (int row=0; row<N; row++) {
+			reqs[row] = 0;
+			n = nums[row][col];
+			reqs[n-1] = 1;
+		}
+		// Return 0 if a requirment is not present in row.
+		for (int i=0; i<N; i++) {
+			if (reqs[i] == 0)
+				return 0;
+		}
 	}
-	// Return 0 if a requirment is not present in col.
-	for (int i=0; i<N; i++) {
-		if (reqs[i] == 0)
-			return 0;
-	}
-	// Return 1 if digits 1-9 are present in col.
+	// Return 1 if digits 1-9 are present in row.
 	return 1;
 }
 
-void one_thread (int nums [N][N]) {
+int check_box() {
+
+}
+
+void one_thread () {
 		
 }
 
-void multi_thread (int nums [N][N]) {	
+void multi_thread () {	
 	//declare N threads
 	pthread_t tid[11];
+	//create threads for checking cols
+	pthread_create(&tid[0], 0, check_cols, NULL);
+	//create threads for checking rows
+	pthread_create(&tid[1], 0, check_rows, NULL);
 
-	for (int i = 0; i < 11; i++) {
-		if (i == 0) {
-			//create thread for checking column
-			pthread_create(&tid[i], 0, checkCol, NULL);
-		}
-		else if (i == 1) {
-			//create thread for checking rows
-			pthread_create(&tid[i], 0, checkRow, NULL);
-		}
-		else {
-			//create threads for checking boxes
-			pthread_create(&tid[i], 0, checkBox, NULL);
-		}
+	//create threads for checking boxes
+	for (int i = 2; i < 11; i++) {
+		pthread_create(&tid[i], 0, check_box, NULL);
 	}
 
 	for (int i = 0; i < 11; i++) {
@@ -98,8 +104,6 @@ void multi_thread (int nums [N][N]) {
 }
 
 int main (int argc, char** argv) {
-	//initialize 9x9 array of integers
-	int nums [N][N];
 	//initialize array using getInput method
 	getInput(nums);
 
@@ -108,11 +112,11 @@ int main (int argc, char** argv) {
 
 	// if user enters 1, single-thread it
 	if (atoi(argv[1]) == 1) {
-		one_thread(int nums [N][N]);
+		one_thread(nums);
 	}
 	// if user enters 2, multi-thread it
 	else if (atoi(argv[1]) == 2) {
-		multi_thread(int nums [N][N]);
+		multi_thread(nums);
 	}
 
 	return 0;
