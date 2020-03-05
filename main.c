@@ -9,6 +9,11 @@
 
 int nums[N][N];
 
+typedef struct {
+	int row;
+	int column;
+} params;
+
 void get_input() {
 	// Open the file.
 	FILE *f = fopen("input.txt", "r");
