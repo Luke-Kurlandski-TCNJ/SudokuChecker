@@ -22,15 +22,19 @@ void get_input(int nums[N][N]) {
 	fclose(f);
 }
 
+void print_board(int nums[N][N]) {
+	printf("Input Board:\n");
+	for (int j=0; j<N; j++) {
+		for (int i=0; i<N; i++) {
+			printf("%d ", nums[i][j]);
+		}
+		printf("\n");
+	}		
+}
+
 void luke() {
 	int nums[N][N];
 	get_input(nums);
-	for (int j=0; j<N; j++) {
-		for (int i=0; i<N; i++) {
-			printf("%d", nums[i][j]);
-		}
-		printf("\n");
-	}	
 }
 
 int main (int argc, char** argv) {
