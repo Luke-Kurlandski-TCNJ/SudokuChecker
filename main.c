@@ -8,7 +8,8 @@
 
 
 int main (int argc, char** argv) {
-	int** arr = getInput(); //initialize array using getInput method
+	int nums [9][9]; //create array of integers
+	getInput(nums); //initialize array using getInput method
 
 	pthread_t tid[11]; //declare N threads
 
