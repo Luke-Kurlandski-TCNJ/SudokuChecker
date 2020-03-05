@@ -38,24 +38,32 @@ void luke() {
 }
 
 int main (int argc, char** argv) {
-	int** arr = getInput(); //initialize array using getInput method
+	//initialize 9x9 array of integers
+	Nnt nums [9][N];
+	//initialize array using getInput method
+	getInput(nums);
 
-	pthread_t tid[11]; //declare N threads
+	//declare N threads
+	pthread_t tid[11];
 
 	for (int i = 0; i < 11; i++) {
 		if (i == 0) {
-			pthread_create(&tid[i], 0, getCol, NULL); //create threads for checking columns
+			//create thread for checking column
+			pthread_create(&tid[i], 0, getCol, NULL);
 		}
 		else if (i == 1) {
-			pthread_create(&tid[i], 0, getRow, NULL); //create thread for checking rows
+			//create thread for checking rows
+			pthread_create(&tid[i], 0, getRow, NULL);
 		}
 		else {
-			pthread_create(&tid[i], 0, getBox, NULL); //create threads for checking boxes
+			//create threads for checking boxes
+			pthread_create(&tid[i], 0, getBox, NULL);
 		}
 	}
 
 	for (int i = 0; i < 11; i++) {
-		pthread_join(tid[i], NULL); //join all 11 threads
+		//join all 11 threads
+		pthread_join(tid[i], NULL);
 	}
 
 	return 0;
