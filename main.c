@@ -34,15 +34,6 @@ void print_board() {
 	}		
 }
 
-void* check_rows(void* param) {
-	// Create one thread for each row.
-	pthread_t tid[N];
-	for (int i=0; i<N; i++) 
-		pthread_create(&tid[i], 0, check_row, /*FIXME*/);
-	for (int i=0; i<N; i++) 
-		pthread_join(tid[i], /*FIXME*/);
-}
-
 void* check_row(void* param) {
 	int row = *(int*)param;
 	int reqs[N];
@@ -62,13 +53,13 @@ void* check_row(void* param) {
 	return (void*) 1;
 }
 
-void* check_cols(void* param) {
+void* check_rows(void* param) {
 	// Create one thread for each row.
 	pthread_t tid[N];
 	for (int i=0; i<N; i++) 
-		pthread_create(&tid[i], 0, check_col, /*FIXME*/);
+		pthread_create(&tid[i], 0, check_row, NULL);
 	for (int i=0; i<N; i++) 
-		pthread_join(tid[i], /*FIXME*/);
+		pthread_join(tid[i], NULL);
 }
 
 void* check_col(void* param) {
@@ -90,11 +81,20 @@ void* check_col(void* param) {
 	return (void*) 1;
 }
 
-void* check_boxes(void* param) {
-
+void* check_cols(void* param) {
+	// Create one thread for each row.
+	pthread_t tid[N];
+	for (int i=0; i<N; i++) 
+		pthread_create(&tid[i], 0, check_col, NULL);
+	for (int i=0; i<N; i++) 
+		pthread_join(tid[i], NULL);
 }
 
 void* check_box(void* param) {
+
+}
+
+void* check_boxes(void* param) {
 
 }
 
@@ -120,7 +120,7 @@ void multi_thread () {
 	//create threads for checking rows
 	pthread_create(&tid[1], 0, check_rows, NULL);
 	// Check Boxes 
-	pthread_create(&tid[i], 0, check_boxes, NULL);
+	pthread_create(&tid[2], 0, check_boxes, NULL);
 
 	//join all 3 threads.
 	for (int i = 0; i < 3; i++) 
