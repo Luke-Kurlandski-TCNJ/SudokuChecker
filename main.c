@@ -9,11 +9,6 @@
 
 int nums[N][N];
 
-typedef struct {
-	int row;
-	int column;
-} params;
-
 void get_input() {
 	// Open the file.
 	FILE *f = fopen("input.txt", "r");
@@ -104,6 +99,16 @@ void* check_box(void* param) {
 }
 
 void one_thread () {
+	// Check all rows.
+	for (int row=0; row<N; row++)	
+		check_row(row);
+	// Check all columns.
+	for (int col=0; col<N; col++)	
+		check_row(col);
+	// Check all boxes.
+	for (int row=0; row<N; row+=3)
+		for (int col=0; col<N; col+=3)
+			check_box(row, col);
 		
 }
 
