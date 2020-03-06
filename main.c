@@ -8,6 +8,8 @@
 #define N 9
 
 int nums[N][N];
+int solution = 1;
+int deltaT = 0;
 
 typedef struct {
 	int row;
@@ -30,13 +32,19 @@ void get_input() {
 }
 
 void print_board() {
-	printf("Input Board:\n");
+	printf("BOARD STATE IN (input.txt)\n");
 	for (int j=0; j<N; j++) {
 		for (int i=0; i<N; i++) {
 			printf("%d ", nums[i][j]);
 		}
 		printf("\n");
-	}		
+	}
+	printf("SOLUTION: ");
+	if (solution == 1)
+		printf("YES ");
+	else
+		printf("NO ");
+	printf("(time %d )", deltaT);
 }
 
 void* check_row(void* param) {
@@ -146,9 +154,6 @@ int main (int argc, char** argv) {
 	//initialize array using getInput method
 	get_input(nums);
 
-	//print out the sudoku board from the array
-	print_board(nums);
-
 	// if user enters 1, single-thread it
 	if (atoi(argv[1]) == 1) {
 		one_thread(nums);
@@ -158,5 +163,8 @@ int main (int argc, char** argv) {
 		multi_thread(nums);
 	}
 
+	//print out the sudoku board from the array
+	print_board(nums);
+	
 	return 0;
 }
