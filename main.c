@@ -108,7 +108,19 @@ void* check_box(void* param) {
 }
 
 void* check_boxes(void* param) {
-
+	pthread_t tid[N];
+	for (int i=0; i<N; i++) 
+		pthread_create(&tid[i], 0, check_col, NULL);
+	for (int i=0; i<N; i++) 
+		pthread_join(tid[i], NULL);
+	// Check all boxes.
+	for (int row=0; row<N; row+=3) {
+		for (int col=0; col<N; col+=3) {
+			data->row = row;
+			data->col = col;
+			check_box(data);
+		}
+	
 }
 
 void one_thread () {
