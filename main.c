@@ -103,8 +103,30 @@ void* check_cols(void* param) {
 		pthread_join(tid[i], NULL);
 }
 
-void* check_box(void* param) {
+void* check_box(void* param) {	
+	params* data = param;
+	int reqs[N] = {0,0,0,0,0,0,0,0,0};
+	int n;
+	int currRow = data->row;
+	int currCol = data->col;
 
+	// Determine which requirments (1-9) are present.
+	for (int i=0; i<N; i++) {
+		n = nums[currRow][currCol];
+		currRow++;
+		if (currRow % 3 == 0) {
+			currRow = data->row;
+			currCol++;
+		}
+		reqs[n-1] = 1;
+	}
+	// Return 0 if a requirment is not present in row.
+	for (int i=0; i<N; i++) {
+		if (reqs[i] == 0) {
+			solution = 0;
+			return 0; //return because solution is already incorrect
+		}
+	}
 }
 
 void* check_boxes(void* param) {
