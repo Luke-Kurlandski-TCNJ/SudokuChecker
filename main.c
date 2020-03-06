@@ -31,7 +31,7 @@ void get_input() {
 	fclose(f);
 }
 
-void print_board(float deltaT) {
+void print_board(double deltaT) {
 	printf("BOARD STATE IN (input.txt)\n");
 	for (int j=0; j<N; j++) {
 		for (int i=0; i<N; i++) {
@@ -44,7 +44,7 @@ void print_board(float deltaT) {
 		printf("YES ");
 	else
 		printf("NO ");
-	printf("(time %f)\n", deltaT);
+	printf("(time %lf)\n", deltaT);
 }
 
 void* check_row(void* param) {
@@ -152,25 +152,24 @@ void multi_thread () {
 
 int main (int argc, char** argv) {
 	// Record the start time of program.
-	time_t start = time(NULL);
+	clock_t t = clock();
 
 	//initialize array using getInput method
 	get_input();
 
 	// if user enters 1, single-thread it
-	if (atoi(argv[1]) == 1) {
+	if (atoi(argv[1]) == 1)
 		one_thread();
-	}
 	// if user enters 2, multi-thread it
-	else if (atoi(argv[1]) == 2) {
+	else if (atoi(argv[1]) == 2)
 		multi_thread();
-	}
 
 	// Record the end time of program.
-	time_t end = time(NULL);
-
-	//print out the sudoku board from the array
-	print_board(difftime(end, start));
+	t = clock() - t;
+	double deltaT = ((double)t)/CLOCKS_PER_SEC;
+	
+	// Print out the sudoku board from the array.
+	print_board(deltaT);
 	
 	return 0;
 }
