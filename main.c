@@ -87,7 +87,7 @@ void* check_col(void* param) {
 	// Return 0 if a requirment is not present in row.
 	for (int i=0; i<N; i++) {
 		if (reqs[i] == 0) {
-			solution - 0;
+			solution = 0;
 			return 0; //return because solution is already incorrect
 		}
 	}
