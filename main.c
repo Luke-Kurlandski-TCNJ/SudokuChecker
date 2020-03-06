@@ -69,8 +69,12 @@ void* check_row(void* param) {
 void* check_rows(void* param) {
 	// Create one thread for each row.
 	pthread_t tid[N];
-	for (int i=0; i<N; i++) 
-		pthread_create(&tid[i], 0, check_row, NULL);
+	// Store information of curent coordinates.
+	params *data = (params*)malloc(sizeof(params));
+	for (int i=0; i<N; i++) {
+		data->row = i;
+		pthread_create(&tid[i], 0, check_row, data);
+	}
 	for (int i=0; i<N; i++) 
 		pthread_join(tid[i], NULL);
 }
@@ -97,8 +101,12 @@ void* check_col(void* param) {
 void* check_cols(void* param) {
 	// Create one thread for each row.
 	pthread_t tid[N];
-	for (int i=0; i<N; i++) 
-		pthread_create(&tid[i], 0, check_col, NULL);
+	// Store information of curent coordinates.
+	params *data = (params*)malloc(sizeof(params));
+	for (int i=0; i<N; i++) {
+		data->col = i;
+		pthread_create(&tid[i], 0, check_col, data);
+	}
 	for (int i=0; i<N; i++) 
 		pthread_join(tid[i], NULL);
 }
@@ -108,19 +116,7 @@ void* check_box(void* param) {
 }
 
 void* check_boxes(void* param) {
-	pthread_t tid[N];
-	for (int i=0; i<N; i++) 
-		pthread_create(&tid[i], 0, check_col, NULL);
-	for (int i=0; i<N; i++) 
-		pthread_join(tid[i], NULL);
-	// Check all boxes.
-	for (int row=0; row<N; row+=3) {
-		for (int col=0; col<N; col+=3) {
-			data->row = row;
-			data->col = col;
-			check_box(data);
-		}
-	
+
 }
 
 void one_thread () {
