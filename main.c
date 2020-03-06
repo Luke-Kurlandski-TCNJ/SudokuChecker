@@ -161,8 +161,7 @@ void one_thread () {
 			data->col = col;
 			check_box(data);
 		}
-	}
-		
+	}	
 }
 
 void multi_thread () {	
