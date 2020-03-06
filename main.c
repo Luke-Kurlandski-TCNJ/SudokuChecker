@@ -43,7 +43,7 @@ void print_board(float deltaT) {
 		printf("YES ");
 	else
 		printf("NO ");
-	printf("(time %d \n)", deltaT);
+	printf("(time %f)\n", deltaT);
 }
 
 void* check_row(void* param) {
@@ -154,22 +154,22 @@ int main (int argc, char** argv) {
 	time_t start = time(NULL);
 
 	//initialize array using getInput method
-	get_input(nums);
+	get_input();
 
 	// if user enters 1, single-thread it
 	if (atoi(argv[1]) == 1) {
-		one_thread(nums);
+		one_thread();
 	}
 	// if user enters 2, multi-thread it
 	else if (atoi(argv[1]) == 2) {
-		multi_thread(nums);
+		multi_thread();
 	}
 
 	// Record the end time of program.
 	time_t end = time(NULL);
 
 	//print out the sudoku board from the array
-	print_board(diff_time(end, start));
+	print_board(difftime(end, start));
 	
 	return 0;
 }
