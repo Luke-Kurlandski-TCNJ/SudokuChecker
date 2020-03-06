@@ -59,7 +59,6 @@ void* check_row(void* param) {
 	// Return 0 if a requirment is not present in row.
 	for (int i=0; i<N; i++) {
 		if (reqs[i] == 0) {
-			printf("%d is not in row  %d\n", i, data->row);
 			solution = 0;
 			return 0; //return because solution is already incorrect
 		}
