@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <time.h>
 
 #define N 9
 
@@ -47,18 +48,18 @@ void print_board(float deltaT) {
 }
 
 void* check_row(void* param) {
-	params* data = param;
-	int reqs[N];
+	params* data = (params*)param;
+	int reqs[N] = {0,0,0,0,0,0,0,0,0};
 	int n;
 	// Determine which requirments (1-9) are present.
 	for (int col=0; col<N; col++) {
-		reqs[col] = 0;
 		n = nums[data->row][col];
 		reqs[n-1] = 1;
 	}
 	// Return 0 if a requirment is not present in row.
 	for (int i=0; i<N; i++) {
 		if (reqs[i] == 0) {
+			printf("%d is not in row  %d\n", i, data->row);
 			solution = 0;
 			return 0; //return because solution is already incorrect
 		}
@@ -76,18 +77,18 @@ void* check_rows(void* param) {
 
 void* check_col(void* param) {
 	params* data = param;
-	int reqs[N];
+	int reqs[N] = {0,0,0,0,0,0,0,0,0};
 	int n;
 	// Determine which requirments (1-9) are present.
 	for (int row=0; row<N; row++) {
-		reqs[row] = 0;
 		n = nums[row][data->col];
 		reqs[n-1] = 1;
 	}
 	// Return 0 if a requirment is not present in row.
 	for (int i=0; i<N; i++) {
 		if (reqs[i] == 0) {
-			solution - 0;
+			printf("%d is not in column %d", i, data->col);
+			solution = 0;
 			return 0; //return because solution is already incorrect
 		}
 	}
