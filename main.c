@@ -68,7 +68,7 @@ void* check_rows(void* param) {
 }
 
 void* check_col(void* param) {
-	int col = *(int*)param;
+	int col = (params*)param;
 	int reqs[N];
 	int n;
 	// Determine which requirments (1-9) are present.
@@ -104,16 +104,26 @@ void* check_boxes(void* param) {
 }
 
 void one_thread () {
+	// Store information of cuurent coordinates.
+	params *data = (params*)malloc(sizeof(params));
 	// Check all rows.
-	for (int row=0; row<N; row++)	
-		check_row(row);
+	for (int row=0; row<N; row++) {	
+		data->row = row;
+		check_row(data);
+	}
 	// Check all columns.
-	for (int col=0; col<N; col++)	
-		check_row(col);
+	for (int col=0; col<N; col++) {	
+		data->col = col;
+		check_col(data);
+	}
 	// Check all boxes.
-	for (int row=0; row<N; row+=3)
-		for (int col=0; col<N; col+=3)
-			check_box(row, col);
+	for (int row=0; row<N; row+=3) {
+		for (int col=0; col<N; col+=3) {
+			data->row = row;
+			data->col = col;
+			check_box(data);
+		}
+	}
 		
 }
 
