@@ -9,7 +9,6 @@
 
 int nums[N][N];
 int solution = 1;
-int deltaT = 0;
 
 typedef struct {
 	int row;
@@ -31,7 +30,7 @@ void get_input() {
 	fclose(f);
 }
 
-void print_board() {
+void print_board(float deltaT) {
 	printf("BOARD STATE IN (input.txt)\n");
 	for (int j=0; j<N; j++) {
 		for (int i=0; i<N; i++) {
@@ -44,7 +43,7 @@ void print_board() {
 		printf("YES ");
 	else
 		printf("NO ");
-	printf("(time %d )", deltaT);
+	printf("(time %d \n)", deltaT);
 }
 
 void* check_row(void* param) {
@@ -151,6 +150,9 @@ void multi_thread () {
 }
 
 int main (int argc, char** argv) {
+	// Record the start time of program.
+	time_t start = time(NULL);
+
 	//initialize array using getInput method
 	get_input(nums);
 
@@ -163,8 +165,11 @@ int main (int argc, char** argv) {
 		multi_thread(nums);
 	}
 
+	// Record the end time of program.
+	time_t end = time(NULL);
+
 	//print out the sudoku board from the array
-	print_board(nums);
+	print_board(diff_time(end, start));
 	
 	return 0;
 }
