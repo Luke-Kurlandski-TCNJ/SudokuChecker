@@ -40,13 +40,13 @@ void print_board() {
 }
 
 void* check_row(void* param) {
-	int row = *(int*)param;
+	params* data = param;
 	int reqs[N];
 	int n;
 	// Determine which requirments (1-9) are present.
 	for (int col=0; col<N; col++) {
 		reqs[col] = 0;
-		n = nums[row][col];
+		n = nums[data->row][col];
 		reqs[n-1] = 1;
 	}
 	// Return 0 if a requirment is not present in row.
@@ -68,13 +68,13 @@ void* check_rows(void* param) {
 }
 
 void* check_col(void* param) {
-	int col = (params*)param;
+	params* data = param;
 	int reqs[N];
 	int n;
 	// Determine which requirments (1-9) are present.
 	for (int row=0; row<N; row++) {
 		reqs[row] = 0;
-		n = nums[row][col];
+		n = nums[row][data->col];
 		reqs[n-1] = 1;
 	}
 	// Return 0 if a requirment is not present in row.
