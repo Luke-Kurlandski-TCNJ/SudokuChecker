@@ -138,7 +138,24 @@ void* check_box(void* param) {
 }
 
 void* check_boxes(void* param) {
-
+	// Create one thread for each box.
+	pthread_t tid[N];
+	// Create counter variable
+	int i = 0;
+	// Store information of current coordinates.
+	params *data = (params*)malloc(sizeof(params));
+	for (int row=0; row<N; row+=3) {
+		for (int col=0; col<N; col+=3) {
+			data->row = row;
+			data->col = col;
+			pthread_create(&tid[i], 0, check_box, data);
+			i++;
+		}
+	}
+	//join each thread
+	for (i=0; i<N; i++) { 
+		pthread_join(tid[i], NULL);
+	}
 }
 
 void one_thread () {
