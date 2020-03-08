@@ -6,16 +6,21 @@
 #include <unistd.h>
 #include <time.h>
 
+// Size of the soduko puzzle.
 #define N 9
 
+// Array with sudoku values.
 int nums[N][N];
+// Assume puzzle is a solution by default.
 int solution = 1;
 
+// Pass information via threads.
 typedef struct {
 	int row;
 	int col;
 } params;
 
+// Pull input from txt file into 2-D array.
 void get_input() {
 	// Open the file.
 	FILE *f = fopen("input.txt", "r");
@@ -31,6 +36,7 @@ void get_input() {
 	fclose(f);
 }
 
+// Print the board, solution status, and time to solve.
 void print_board(double deltaT) {
 	printf("BOARD STATE IN (input.txt)\n");
 	for (int j=0; j<N; j++) {
@@ -47,6 +53,7 @@ void print_board(double deltaT) {
 	printf("(time %lf)\n", deltaT);
 }
 
+// Check if digits 1-9 are present in single row.
 void* check_row(void* param) {
 	params* data = (params*)param;
 	int reqs[N] = {0,0,0,0,0,0,0,0,0};
@@ -65,6 +72,7 @@ void* check_row(void* param) {
 	}
 }
 
+// Check if digits 1-9 are present in ALL rows.
 void* check_rows(void* param) {
 	// Create one thread for each row.
 	pthread_t tid[N];
@@ -78,6 +86,7 @@ void* check_rows(void* param) {
 		pthread_join(tid[i], NULL);
 }
 
+// Check if digits 1-9 are present in single column.
 void* check_col(void* param) {
 	params* data = param;
 	int reqs[N] = {0,0,0,0,0,0,0,0,0};
@@ -97,8 +106,9 @@ void* check_col(void* param) {
 	}
 }
 
+// Check if digits 1-9 are present in ALL columns.
 void* check_cols(void* param) {
-	// Create one thread for each row.
+	// Create one thread for each column.
 	pthread_t tid[N];
 	// Store information of curent coordinates.
 	params *data = (params*)malloc(sizeof(params));
@@ -110,13 +120,13 @@ void* check_cols(void* param) {
 		pthread_join(tid[i], NULL);
 }
 
+// Check if digits 1-9 are present in single 3x3 box.
 void* check_box(void* param) {
 	params* data = param;
 	int reqs[N] = {0,0,0,0,0,0,0,0,0};
 	int n;
 	int currRow = data->row;
 	int currCol = data->col;
-
 	// Determine which requirements (1-9) are present.
 	for (int i=0; i<N; i++) {
 		n = nums[currRow][currCol];
@@ -127,7 +137,7 @@ void* check_box(void* param) {
 		}
 		reqs[n-1] = 1;
 	}
-	//return if a requirement is not present in row.
+	// Return if a requirement is not present in box.
 	for (int i=0; i<N; i++) {
 		if (reqs[i] == 0) {
 			solution = 0;
@@ -136,10 +146,11 @@ void* check_box(void* param) {
 	}
 }
 
+// Check if digits 1-9 are present in ALL 3x3 boxes.
 void* check_boxes(void* param) {
 	// Create one thread for each box.
 	pthread_t tid[N];
-	// Create counter variable
+	// Create counter variable.
 	int i = 0;
 	// Store information of current coordinates.
 	params *data = (params*)malloc(sizeof(params));
@@ -151,12 +162,13 @@ void* check_boxes(void* param) {
 			i++;
 		}
 	}
-	//join each thread
+	// Join each thread.
 	for (i=0; i<N; i++) { 
 		pthread_join(tid[i], NULL);
 	}
 }
 
+// If user wants to check puzzle with one thread.
 void one_thread () {
 	// Store information of cuurent coordinates.
 	params *data = (params*)malloc(sizeof(params));
@@ -180,17 +192,17 @@ void one_thread () {
 	}	
 }
 
+// If user wants to check puzzle with 27 threads.
 void multi_thread () {	
-	//declare N threads
+	// Three threads, for rows/cols/boxes.
 	pthread_t tid[3];
-	//create threads for checking cols
+	// Create thread for checking cols.
 	pthread_create(&tid[0], 0, check_cols, NULL);
-	//create threads for checking rows
+	// Create thread for checking rows.
 	pthread_create(&tid[1], 0, check_rows, NULL);
-	// Check Boxes 
+	// Create thread for checking boxes.
 	pthread_create(&tid[2], 0, check_boxes, NULL);
-
-	//join all 3 threads.
+	// Join threads.
 	for (int i = 0; i < 3; i++) 
 		pthread_join(tid[i], NULL);
 }
@@ -199,13 +211,12 @@ int main (int argc, char** argv) {
 	// Record the start time of program.
 	clock_t t = clock();
 
-	//initialize array using getInput method
+	// Initialize sudoku array.
 	get_input();
 
-	// if user enters 1, single-thread it
+	// User enters 1 for single-thread, 2 for multi-thread.
 	if (atoi(argv[1]) == 1)
 		one_thread();
-	// if user enters 2, multi-thread it
 	else if (atoi(argv[1]) == 2)
 		multi_thread();
 
