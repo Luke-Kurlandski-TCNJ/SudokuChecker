@@ -60,6 +60,10 @@ void* check_row(void* param) {
 	int n;
 	// Determine which requirments (1-9) are present.
 	for (int col=0; col<N; col++) {
+		// First check if another thread has proved not solution.
+		if (solution == 0) {
+			return 0;
+		}
 		n = nums[data->row][col];
 		reqs[n-1] = 1;
 	}
@@ -80,10 +84,24 @@ void* check_rows(void* param) {
 	params *data = (params*)malloc(sizeof(params));
 	for (int i=0; i<N; i++) {
 		data->row = i;
+		// First check if another thread has proved not solution.
+		if (solution == 0) {
+			return 0;
+		}
 		pthread_create(&tid[i], 0, check_row, data);
 	}
 	for (int i=0; i<N; i++) 
 		pthread_join(tid[i], NULL);
+}
+
+// Check if digits 1-9 are present in ALL rows (single threaded).
+void* check_rows_single(void* param) {
+	// Store information of curent coordinates.
+	params *data = (params*)malloc(sizeof(params));
+	for (int i=0; i<N; i++) {
+		data->row = i;
+		check_row(data);
+	}
 }
 
 // Check if digits 1-9 are present in single column.
@@ -93,6 +111,10 @@ void* check_col(void* param) {
 	int n;
 	// Determine which requirments (1-9) are present.
 	for (int row=0; row<N; row++) {
+		// First check if another thread has proved not solution.
+		if (solution == 0) {
+			return 0;
+		}
 		n = nums[row][data->col];
 		reqs[n-1] = 1;
 	}
@@ -113,11 +135,25 @@ void* check_cols(void* param) {
 	// Store information of curent coordinates.
 	params *data = (params*)malloc(sizeof(params));
 	for (int i=0; i<N; i++) {
+		// First check if another thread has proved not solution.
+		if (solution == 0) {
+			return 0;
+		}
 		data->col = i;
 		pthread_create(&tid[i], 0, check_col, data);
 	}
 	for (int i=0; i<N; i++) 
 		pthread_join(tid[i], NULL);
+}
+
+// Check if digits 1-9 are present in ALL columns (single threaded).
+void* check_cols_single(void* param) {
+	// Store information of curent coordinates.
+	params *data = (params*)malloc(sizeof(params));
+	for (int i=0; i<N; i++) {
+		data->col = i;
+		check_col(data);
+	}
 }
 
 // Check if digits 1-9 are present in single 3x3 box.
@@ -129,6 +165,10 @@ void* check_box(void* param) {
 	int currCol = data->col;
 	// Determine which requirements (1-9) are present.
 	for (int i=0; i<N; i++) {
+		// First check if another thread has proved not solution.
+		if (solution == 0) {
+			return 0;
+		}
 		n = nums[currRow][currCol];
 		currRow++;
 		if (currRow % 3 == 0) {
@@ -156,6 +196,10 @@ void* check_boxes(void* param) {
 	params *data = (params*)malloc(sizeof(params));
 	for (int row=0; row<N; row+=3) {
 		for (int col=0; col<N; col+=3) {
+			// First check if another thread has proved not solution.
+			if (solution == 0) {
+				return 0;
+			}
 			data->row = row;
 			data->col = col;
 			pthread_create(&tid[i], 0, check_box, data);
@@ -192,6 +236,21 @@ void one_thread () {
 	}	
 }
 
+// If user wants to check puzzle with 11 threads.
+void eleven_threads() {
+	// Three threads, for rows/cols/boxes.
+	pthread_t tid[3];
+	// Create thread for checking cols.
+	pthread_create(&tid[0], 0, check_cols_single, NULL);
+	// Create thread for checking rows.
+	pthread_create(&tid[1], 0, check_rows_single, NULL);
+	// Create thread for checking boxes.
+	pthread_create(&tid[2], 0, check_boxes, NULL);
+	// Join threads.
+	for (int i = 0; i < 3; i++) 
+		pthread_join(tid[i], NULL);
+}
+
 // If user wants to check puzzle with 27 threads.
 void multi_thread () {	
 	// Three threads, for rows/cols/boxes.
@@ -214,11 +273,13 @@ int main (int argc, char** argv) {
 	// Initialize sudoku array.
 	get_input();
 
-	// User enters 1 for single-thread, 2 for multi-thread.
+	// User enters 1 for single-thread, 2 for 27-thread, 3 for 11 thread.
 	if (atoi(argv[1]) == 1)
 		one_thread();
 	else if (atoi(argv[1]) == 2)
 		multi_thread();
+	else if (atoi(argv[1]) == 3)
+		eleven_threads();
 
 	// Record the end time of program.
 	t = clock() - t;
