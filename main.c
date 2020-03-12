@@ -283,8 +283,12 @@ int main (int argc, char** argv) {
 
 	// Record the end time of program.
 	t = clock() - t;
-	double deltaT = ((double)t)/CLOCKS_PER_SEC;
-	
+	double deltaT = ((double)t)/CLOCKS_PER_SEC;	
+	/* Used to collect data.
+	FILE *f = fopen("3.txt", "a");
+	fprintf(f, "%f\n", deltaT);
+	fclose(f);
+	*/
 	// Print out the sudoku board from the array.
 	print_board(deltaT);
 	
